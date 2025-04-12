@@ -1,12 +1,10 @@
 import React from 'react';
-import './css/index.css';
+import './css/App.css';
+import Products from './components/products/Products';
 
 function App() {
   return (
-    <div>
-      <h1>Welcome to the React App</h1>
-      <p>This is a simple React application.</p>
-    </div>
+    <Products />
   );
 }
 
