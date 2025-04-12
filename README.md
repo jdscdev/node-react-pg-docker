@@ -17,6 +17,15 @@ docker-compose up --build
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000/api/products
 
+4. **Test the project**
+```bash
+cd frontend
+npm test src/tests
+
+cd ../backend
+jest tests
+```
+
 ## CRUD Endpoints
 - `GET /api/products` – Get all products
 - `POST /api/products` – Create a product `{ name, price }`
