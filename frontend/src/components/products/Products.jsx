@@ -49,7 +49,7 @@ const Products = () => {
   return (
     <div>
       <h1>Products</h1>
-      <ProductForm onAddOrEdit={handleAddProduct} product={{ id: 0, name: '', price: 0 }} />
+      <ProductForm onAddOrEdit={handleAddProduct} />
       <ProductList onDelete={handleDeleteProduct} onAddOrEdit={handleUpdateProduct} products={products} />
     </div>
   );

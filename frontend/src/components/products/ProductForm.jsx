@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const ProductForm = ({ onAddOrEdit, product }) => {
-  console.log("ProductForm", product); 
+const params = {
+  id: 0,
+  name: '',
+  price: 0
+};
+
+const ProductForm = ({ onAddOrEdit, product = params }) => {
   const [changedProduct, setChangedProduct] = useState(product);
 
   useEffect(() => {
@@ -14,7 +19,7 @@ const ProductForm = ({ onAddOrEdit, product }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await onAddOrEdit(changedProduct);
-    setChangedProduct({ id: 0, name: '', price: 0 });
+    setChangedProduct(params);
   };
 
   const handleChange = (e) => {
