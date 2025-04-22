@@ -5,17 +5,20 @@ services:
     container_name: backend
     ports:
       - "5000:5000"   # API
+      - "9229:9229"   # Debugger
     environment:
       - DB_HOST=db
       - DB_USER=postgres
       - DB_PASS=password
       - DB_NAME=mydb
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mydb?schema=public  # Prisma
+      - NODE_ENV=development
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      # - /app/node_modules
     depends_on:
       - db
-    command: node server.js
+    command: node --inspect=0.0.0.0:9229 server.js
 
   frontend:
     build: ./frontend # React app
@@ -38,7 +41,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./backend/db/db.sql:/docker-entrypoint-initdb.d/db.sql
+      # - ./backend/db/db.sql:/docker-entrypoint-initdb.d/db.sql
       - pgdata:/var/lib/postgresql/data
 
 volumes:

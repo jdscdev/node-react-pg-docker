@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../db/dbconnection');
+const prisma = require('../prisma/prismaClient');
 
 // GET all products
-router.get('/', async (_, res) => {
-  const result = await pool.query('SELECT * FROM products');
-  res.json(result.rows);
+router.get('/', async (_, res, next) => {
+  try {
+    const products = await prisma.product.findMany();
+    res.json(products);
+  } catch (err) {
+    return res.status(500).json({ error: `Database error ${err.message}` });
+  }
 });
 
 // POST a new product
@@ -13,14 +17,17 @@ router.post('/', async (req, res) => {
   const { name, price } = req.body;
 
   if (!name || price == null) {
-    throw new Error('Name and price are required', 400);
+    return res.status(400).json({ error: 'Invalid product Name or Price' });
   }
   
-  const result = await pool.query(
-    'INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *',
-    [name, price]
-  );
-  res.json(result.rows[0]);
+  try {
+    const newProduct = await prisma.product.create({
+      data: { name, price: parseFloat(price) },
+    });
+    res.status(201).json(newProduct);
+  } catch (err) {
+    return res.status(500).json({ error: `Database error ${err.message}` });
+  }
 });
 
 // PUT a product
@@ -29,14 +36,18 @@ router.put('/:id', async (req, res) => {
   const { name, price } = req.body;
 
   if (!name || price == null) {
-    throw new Error('Name and price are required', 400);
+    return res.status(400).json({ error: 'Invalid product Name or Price' });
   }
   
-  const result = await pool.query(
-    'UPDATE products SET name = $1, price = $2 WHERE id = $3 RETURNING *',
-    [name, price, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const updatedProduct = await prisma.product.update({
+      data: { name, price: parseFloat(price) },
+      where: { id: parseInt(id) }
+    });
+    res.status(200).json(updatedProduct);
+  } catch (err) {
+    return res.status(500).json({ error: `Database error ${err.message}` });
+  }
 });
 
 // DELETE a product
@@ -44,11 +55,18 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params;
     
   if (!id || isNaN(id)) {
-    throw new Error('Invalid product ID', 400);
+    return res.status(400).json({ error: 'Invalid product ID' });
   }
   
-  await pool.query('DELETE FROM products WHERE id = $1', [id]);
-  res.sendStatus(204);
+  try {
+    await prisma.product.delete({
+      where: { id: parseInt(id) }
+    });
+    return res.status(200).json({ message: 'Product deleted successfully' });
+  }
+  catch (err) {
+    return res.status(500).json({ error: `Database error ${err.message}` });
+  }
 });
 
 module.exports = router;
