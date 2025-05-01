@@ -3,7 +3,7 @@ const router = express.Router();
 const prisma = require('../prisma/prismaClient');
 
 // GET all products
-router.get('/', async (_, res, next) => {
+router.get('/', async (_, res) => {
   try {
     const products = await prisma.product.findMany();
     res.json(products);
@@ -16,7 +16,7 @@ router.get('/', async (_, res, next) => {
 router.post('/', async (req, res) => {
   const { name, price } = req.body;
 
-  if (!name || price == null) {
+  if (!name || !price || isNaN(price)) {
     return res.status(400).json({ error: 'Invalid product Name or Price' });
   }
   
@@ -35,7 +35,7 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, price } = req.body;
 
-  if (!name || price == null) {
+  if (!name || !price || isNaN(price)) {
     return res.status(400).json({ error: 'Invalid product Name or Price' });
   }
   
@@ -53,7 +53,7 @@ router.put('/:id', async (req, res) => {
 // DELETE a product
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-    
+
   if (!id || isNaN(id)) {
     return res.status(400).json({ error: 'Invalid product ID' });
   }

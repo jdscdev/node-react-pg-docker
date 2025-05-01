@@ -11,6 +11,9 @@ cd node-react-pg-docker-app
 2. **Start the project**
 ```bash
 docker-compose up --build
+
+# To remove Docker containers and volumes
+docker-compose down -v --remove-orphans 
 ```
 
 3. **Visit the app**
@@ -32,7 +35,16 @@ jest tests
 - `PUT /api/products/:id` – Update a product `{ name, price }`
 - `DELETE /api/products/:id` – Delete a product
 
+
+**Debug / Run servers**
+```bash
+cd backend
+node server.js
+
+cd ../frontend
+npm start
+```
+
 ## Notes
 - The backend connects to PostgreSQL using environment variables from Docker Compose.
 - The frontend makes requests to the backend using the browser's localhost. Consider using a proxy setup in development or configuring nginx for production.
-- Database schema is defined in `backend/db.sql` and loaded automatically.

@@ -18,7 +18,12 @@ services:
       # - /app/node_modules
     depends_on:
       - db
-    command: node --inspect=0.0.0.0:9229 server.js
+    command: >
+      sh -c "
+        npx prisma generate &&
+        npx prisma migrate dev --name init --skip-seed &&
+        node --inspect=0.0.0.0:9229 server.js
+      "
 
   frontend:
     build: ./frontend # React app
@@ -38,6 +43,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
+    expose:
+      - "5432"
     ports:
       - "5432:5432"
     volumes:

@@ -11,7 +11,7 @@ const Products = () => {
     APIClient.getAll(API_URL)
       .then(setProducts)
       .catch(error => {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching products:', error.message);
       });
   }, []);
 
