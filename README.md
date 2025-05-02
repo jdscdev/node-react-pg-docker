@@ -1,4 +1,4 @@
-# Node + React + PostgreSQL + Docker App
+# Node + React + PostgreSQL + Docker + Prisma App
 
 ## Setup Instructions
 
@@ -29,14 +29,7 @@ cd ../backend
 jest tests
 ```
 
-## CRUD Endpoints
-- `GET /api/products` – Get all products
-- `POST /api/products` – Create a product `{ name, price }`
-- `PUT /api/products/:id` – Update a product `{ name, price }`
-- `DELETE /api/products/:id` – Delete a product
-
-
-**Debug / Run servers**
+5. **Debug without Docker**
 ```bash
 cd backend
 node server.js
@@ -44,6 +37,14 @@ node server.js
 cd ../frontend
 npm start
 ```
+
+
+## CRUD Endpoints
+- `GET /api/products` – Get all products
+- `POST /api/products` – Create a product `{ name, price }`
+- `PUT /api/products/:id` – Update a product `{ name, price }`
+- `DELETE /api/products/:id` – Delete a product
+
 
 ## Notes
 - The backend connects to PostgreSQL using environment variables from Docker Compose.
